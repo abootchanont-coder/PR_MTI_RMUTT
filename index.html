@@ -10,6 +10,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- QRCode.js Library for self-contained QR rendering -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     
     <script>
         tailwind.config = {
@@ -48,6 +50,12 @@
         .qr-card:hover {
             transform: scale(1.04);
             box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+        }
+        .qr-box img, .qr-box canvas {
+            margin: 0 auto;
+            width: 100% !important;
+            height: auto !important;
+            max-width: 180px;
         }
         .loader {
             border-top-color: #38bdf8;
@@ -183,7 +191,7 @@
             </div>
         </section>
 
-        <!-- Dynamic Image Viewer Section (Shows immediately on click) -->
+        <!-- Dynamic Image Viewer Section -->
         <section id="viewer-section" class="hidden transition-all duration-500">
             <div class="glass-panel rounded-3xl p-4 sm:p-8 shadow-2xl border border-sky-400/30">
                 
@@ -233,7 +241,7 @@
             </div>
         </section>
 
-        <!-- QR Codes Contact Section -->
+        <!-- QR Codes Contact Section (100% Self-Contained & Clickable) -->
         <section class="glass-panel rounded-3xl p-6 sm:p-10 shadow-xl">
             <div class="text-center max-w-2xl mx-auto mb-8">
                 <h2 class="text-2xl sm:text-3xl font-bold text-white mb-2 flex items-center justify-center gap-3">
@@ -241,67 +249,91 @@
                     <span id="i18n-contact-title">ช่องทางการติดต่อและติดตามข่าวสาร</span>
                 </h2>
                 <p id="i18n-contact-sub" class="text-slate-300 text-sm sm:text-base">
-                    สแกน QR Code ด้านล่างเพื่อสอบถามข้อมูลการรับสมัครและติดตามกิจกรรมของสาขาวิชา
+                    สแกน QR Code หรือคลิกที่การ์ดเพื่อสอบถามข้อมูลการรับสมัครและติดตามกิจกรรมของสาขาวิชา
                 </p>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 
-                <!-- 1. LINE QR (Updated file) -->
-                <div class="qr-card bg-white rounded-2xl p-5 text-center shadow-lg flex flex-col items-center justify-between border-b-4 border-[#06C755]">
+                <!-- 1. LINE QR -->
+                <a href="https://line.me/ti/p/9fD1n37a6y" target="_blank" rel="noopener noreferrer"
+                   class="qr-card bg-white rounded-2xl p-5 text-center shadow-lg flex flex-col items-center justify-between border-b-4 border-[#06C755] cursor-pointer">
                     <div class="w-full">
                         <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#06C755]/10 text-[#06C755] font-bold text-sm mb-3">
                             <i class="fa-brands fa-line text-lg"></i>
                             <span>LINE Official</span>
                         </div>
-                        <div class="aspect-square w-full max-w-[200px] mx-auto bg-slate-50 rounded-xl p-2 border border-slate-100 flex items-center justify-center overflow-hidden">
-                            <img src="56A7BD11-A793-415A-A5DD-3CAD1CE514F8.png" alt="LINE QR Code" class="w-full h-full object-contain">
+                        <div class="relative aspect-square w-full max-w-[190px] mx-auto bg-white rounded-xl p-2 border border-slate-100 flex items-center justify-center">
+                            <div id="qr-line" class="qr-box w-full"></div>
+                            <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                                <div class="bg-white px-1.5 py-0.5 rounded shadow-sm border border-[#06C755]">
+                                    <span class="text-[#06C755] font-extrabold text-xs tracking-wider">LINE</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <p id="i18n-qr-line" class="text-slate-600 text-xs font-medium mt-3">สแกนเพื่อแอดไลน์สอบถามข้อมูล</p>
-                </div>
+                    <p id="i18n-qr-line" class="text-slate-600 text-xs font-medium mt-3">สแกนหรือแตะเพื่อแอดไลน์</p>
+                </a>
 
                 <!-- 2. Facebook QR -->
-                <div class="qr-card bg-white rounded-2xl p-5 text-center shadow-lg flex flex-col items-center justify-between border-b-4 border-[#1877F2]">
+                <a href="https://www.facebook.com/PhysicsRMUTT" target="_blank" rel="noopener noreferrer"
+                   class="qr-card bg-white rounded-2xl p-5 text-center shadow-lg flex flex-col items-center justify-between border-b-4 border-[#1877F2] cursor-pointer">
                     <div class="w-full">
                         <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#1877F2]/10 text-[#1877F2] font-bold text-sm mb-3">
                             <i class="fa-brands fa-facebook text-lg"></i>
                             <span>Facebook</span>
                         </div>
-                        <div class="aspect-square w-full max-w-[200px] mx-auto bg-slate-50 rounded-xl p-2 border border-slate-100 flex items-center justify-center overflow-hidden">
-                            <img src="LINE_NOTE_261118_1.jpg" alt="Facebook QR Code" class="w-full h-full object-contain">
+                        <div class="relative aspect-square w-full max-w-[190px] mx-auto bg-white rounded-xl p-2 border border-slate-100 flex items-center justify-center">
+                            <div id="qr-fb" class="qr-box w-full"></div>
+                            <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                                <div class="w-9 h-9 rounded-full bg-[#1877F2] text-white flex items-center justify-center shadow-md border-2 border-white">
+                                    <i class="fa-brands fa-facebook-f text-lg"></i>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <p id="i18n-qr-fb" class="text-slate-600 text-xs font-medium mt-3">ติดตามข่าวสารทางเพจเฟซบุ๊ก</p>
-                </div>
+                </a>
 
                 <!-- 3. Instagram QR -->
-                <div class="qr-card bg-white rounded-2xl p-5 text-center shadow-lg flex flex-col items-center justify-between border-b-4 border-[#E4405F]">
+                <a href="https://www.instagram.com/physics_rmutt" target="_blank" rel="noopener noreferrer"
+                   class="qr-card bg-white rounded-2xl p-5 text-center shadow-lg flex flex-col items-center justify-between border-b-4 border-[#E4405F] cursor-pointer">
                     <div class="w-full">
                         <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-pink-500/10 text-[#E4405F] font-bold text-sm mb-3">
                             <i class="fa-brands fa-instagram text-lg"></i>
                             <span>Instagram</span>
                         </div>
-                        <div class="aspect-square w-full max-w-[200px] mx-auto bg-slate-50 rounded-xl p-2 border border-slate-100 flex items-center justify-center overflow-hidden">
-                            <img src="LINE_NOTE_261118_2.jpg" alt="Instagram QR Code" class="w-full h-full object-contain">
+                        <div class="relative aspect-square w-full max-w-[190px] mx-auto bg-white rounded-xl p-2 border border-slate-100 flex items-center justify-center">
+                            <div id="qr-ig" class="qr-box w-full"></div>
+                            <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                                <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600 text-white flex items-center justify-center shadow-md border-2 border-white">
+                                    <i class="fa-brands fa-instagram text-lg"></i>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <p id="i18n-qr-ig" class="text-slate-600 text-xs font-medium mt-3">ชมภาพบรรยากาศและผลงาน</p>
-                </div>
+                </a>
 
                 <!-- 4. TikTok QR -->
-                <div class="qr-card bg-white rounded-2xl p-5 text-center shadow-lg flex flex-col items-center justify-between border-b-4 border-slate-900">
+                <a href="https://www.tiktok.com/@appliedphysics_rmutt" target="_blank" rel="noopener noreferrer"
+                   class="qr-card bg-white rounded-2xl p-5 text-center shadow-lg flex flex-col items-center justify-between border-b-4 border-slate-900 cursor-pointer">
                     <div class="w-full">
                         <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900/10 text-slate-900 font-bold text-sm mb-3">
                             <i class="fa-brands fa-tiktok text-lg"></i>
                             <span>TikTok</span>
                         </div>
-                        <div class="aspect-square w-full max-w-[200px] mx-auto bg-slate-50 rounded-xl p-2 border border-slate-100 flex items-center justify-center overflow-hidden">
-                            <img src="LINE_NOTE_261118_3.jpg" alt="TikTok QR Code" class="w-full h-full object-contain">
+                        <div class="relative aspect-square w-full max-w-[190px] mx-auto bg-white rounded-xl p-2 border border-slate-100 flex items-center justify-center">
+                            <div id="qr-tiktok" class="qr-box w-full"></div>
+                            <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                                <div class="w-9 h-9 rounded-full bg-slate-950 text-white flex items-center justify-center shadow-md border-2 border-white">
+                                    <i class="fa-brands fa-tiktok text-base"></i>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <p id="i18n-qr-tiktok" class="text-slate-600 text-xs font-medium mt-3">รับชมคลิปวิดีโอสั้นน่ารู้</p>
-                </div>
+                </a>
 
             </div>
         </section>
@@ -317,6 +349,42 @@
     <script>
         let currentLang = 'th';
         let currentKey = null;
+
+        // Render Embedded QR Codes automatically on page load (Never breaks on mobile!)
+        window.addEventListener('DOMContentLoaded', () => {
+            new QRCode(document.getElementById("qr-line"), {
+                text: "https://line.me/ti/p/9fD1n37a6y",
+                width: 200,
+                height: 200,
+                colorDark : "#06C755",
+                colorLight : "#ffffff",
+                correctLevel : QRCode.CorrectLevel.H
+            });
+            new QRCode(document.getElementById("qr-fb"), {
+                text: "https://www.facebook.com/PhysicsRMUTT",
+                width: 200,
+                height: 200,
+                colorDark : "#000000",
+                colorLight : "#ffffff",
+                correctLevel : QRCode.CorrectLevel.H
+            });
+            new QRCode(document.getElementById("qr-ig"), {
+                text: "https://www.instagram.com/physics_rmutt",
+                width: 200,
+                height: 200,
+                colorDark : "#000000",
+                colorLight : "#ffffff",
+                correctLevel : QRCode.CorrectLevel.H
+            });
+            new QRCode(document.getElementById("qr-tiktok"), {
+                text: "https://www.tiktok.com/@appliedphysics_rmutt",
+                width: 200,
+                height: 200,
+                colorDark : "#000000",
+                colorLight : "#ffffff",
+                correctLevel : QRCode.CorrectLevel.H
+            });
+        });
 
         // Updated Google Drive Links & Bilingual Titles
         const curricula = {
@@ -362,8 +430,8 @@
                 closeBtn: 'ปิด',
                 loading: 'กำลังโหลดภาพจาก Google Drive...',
                 contactTitle: 'ช่องทางการติดต่อและติดตามข่าวสาร',
-                contactSub: 'สแกน QR Code ด้านล่างเพื่อสอบถามข้อมูลการรับสมัครและติดตามกิจกรรมของสาขาวิชา',
-                qrLine: 'สแกนเพื่อแอดไลน์สอบถามข้อมูล',
+                contactSub: 'สแกน QR Code หรือคลิกที่การ์ดเพื่อสอบถามข้อมูลการรับสมัครและติดตามกิจกรรมของสาขาวิชา',
+                qrLine: 'สแกนหรือแตะเพื่อแอดไลน์',
                 qrFb: 'ติดตามข่าวสารทางเพจเฟซบุ๊ก',
                 qrIg: 'ชมภาพบรรยากาศและผลงาน',
                 qrTiktok: 'รับชมคลิปวิดีโอสั้นน่ารู้',
@@ -389,8 +457,8 @@
                 closeBtn: 'Close',
                 loading: 'Loading image from Google Drive...',
                 contactTitle: 'Contact Us & Follow Our Channels',
-                contactSub: 'Scan the QR codes below for admission inquiries and program updates',
-                qrLine: 'Scan to chat with us on LINE',
+                contactSub: 'Scan QR codes or tap any card for admission inquiries and program updates',
+                qrLine: 'Scan or tap to chat on LINE',
                 qrFb: 'Follow our official Facebook page',
                 qrIg: 'Explore activities & photos on Instagram',
                 qrTiktok: 'Watch short videos on TikTok',
@@ -404,7 +472,6 @@
             document.documentElement.lang = lang;
             document.title = t.pageTitle;
 
-            // Update toggle button styles
             const btnTh = document.getElementById('lang-btn-th');
             const btnEn = document.getElementById('lang-btn-en');
             if (lang === 'th') {
@@ -415,7 +482,6 @@
                 btnTh.className = 'px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold transition-all text-slate-200 hover:text-white';
             }
 
-            // Update text elements
             document.getElementById('i18n-main-title').textContent = t.mainTitle;
             document.getElementById('i18n-faculty').textContent = t.faculty;
             document.getElementById('i18n-university').textContent = t.university;
@@ -449,7 +515,6 @@
             document.getElementById('i18n-qr-tiktok').textContent = t.qrTiktok;
             document.getElementById('i18n-footer').textContent = t.footer;
 
-            // Update active viewer title if currently open
             if (currentKey) {
                 const data = curricula[currentKey];
                 document.getElementById('viewer-title').textContent = lang === 'th' ? data.thTitle : data.enTitle;
@@ -461,7 +526,6 @@
             if (!data) return;
             currentKey = key;
 
-            // Highlight active button
             ['bachelor', 'master', 'phd'].forEach(k => {
                 const btn = document.getElementById(`btn-${k}`);
                 if (k === key) {
@@ -471,7 +535,6 @@
                 }
             });
 
-            // Update Viewer Elements
             const viewerSection = document.getElementById('viewer-section');
             const viewerTitle = document.getElementById('viewer-title');
             const directLink = document.getElementById('drive-direct-link');
@@ -484,18 +547,15 @@
             viewerTitle.textContent = currentLang === 'th' ? data.thTitle : data.enTitle;
             directLink.href = data.driveUrl;
 
-            // Show section and loader
             viewerSection.classList.remove('hidden');
             loader.classList.remove('hidden');
             imgWrapper.classList.add('hidden');
             iframeWrapper.classList.add('hidden');
 
-            // Reset & set direct high-res image URL from Google Drive
             imgEl.src = '';
             iframeEl.src = '';
             imgEl.src = `https://drive.google.com/thumbnail?id=${data.fileId}&sz=w2000`;
 
-            // Smooth scroll to image viewer
             setTimeout(() => {
                 viewerSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }, 100);
