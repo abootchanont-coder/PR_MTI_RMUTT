@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>สาขาวิชาเทคโนโลยีและนวัตกรรมวัสดุ - มทร.ธัญบุรี</title>
+    <!-- Google Fonts: Prompt -->
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Prompt', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #0f172a 100%);
+            min-height: 100vh;
+            color: #f8fafc;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+        .btn-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .btn-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+        }
+        .btn-card.active-card {
+            ring: 4px;
+            ring-color: #38bdf8;
+            transform: translateY(-4px);
+        }
+        .qr-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .qr-card:hover {
+            transform: scale(1.04);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+        }
+        /* Custom Loader */
+        .loader {
+            border-top-color: #38bdf8;
+            -webkit-animation: spinner 1.2s linear infinite;
+            animation: spinner 1.2s linear infinite;
+        }
+        @keyframes spinner {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-sky-400 selection:text-slate-900 pb-16">
+
+    <!-- Decorative Background Glow -->
+    <div class="fixed top-0 left-1/4 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="fixed bottom-0 right-1/4 w-96 h-96 bg-cyan-500/20 rounded-full blur-3xl pointer-events-none"></div>
+
+    <!-- Header Section -->
+    <header class="relative pt-10 pb-8 px-4 sm:px-6 lg:px-8 text-center max-w-5xl mx-auto">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-sky-500/20 border border-sky-400/30 text-sky-300 text-xs sm:text-sm font-medium mb-5">
+            <i class="fa-solid fa-atom animate-spin" style="animation-duration: 8s;"></i>
+            <span>Materials Technology and Innovation • RMUTT</span>
+        </div>
+        
+        <h1 class="text-2xl sm:text-4xl md:text-5xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white via-sky-200 to-cyan-300 leading-tight mb-3">
+            สาขาวิชาเทคโนโลยีและนวัตกรรมวัสดุ
+        </h1>
+        <h2 class="text-lg sm:text-2xl font-medium text-slate-200 mb-1">
+            คณะวิทยาศาสตร์และเทคโนโลยี
+        </h2>
+        <p class="text-base sm:text-xl text-sky-300/90 font-light">
+            มหาวิทยาลัยเทคโนโลยีราชมงคลธัญบุรี
+        </p>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12 relative z-10">
+
+        <!-- 3 Degree Buttons Section -->
+        <section>
+            <div class="text-center mb-6">
+                <p class="text-slate-300 text-sm sm:text-base">
+                    <i class="fa-solid fa-hand-pointer mr-1 text-sky-400"></i> คลิกเลือกหลักสูตรเพื่อดูรายละเอียดทันที
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6">
+                
+                <!-- ปริญญาตรี -->
+                <button onclick="showCurriculum('bachelor')" id="btn-bachelor"
+                    class="btn-card group relative overflow-hidden rounded-2xl p-6 text-left bg-gradient-to-br from-sky-500 to-blue-700 border border-sky-400/40 shadow-lg flex flex-col justify-between">
+                    <div class="absolute -right-6 -bottom-6 text-white/10 text-8xl transition-transform group-hover:scale-110">
+                        <i class="fa-solid fa-user-graduate"></i>
+                    </div>
+                    <div>
+                        <span class="inline-block px-3 py-1 rounded-lg bg-white/20 text-white text-xs font-semibold mb-3">
+                            Bachelor's Degree
+                        </span>
+                        <h3 class="text-xl sm:text-2xl font-bold text-white leading-snug">
+                            หลักสูตรวิทยาศาสตรบัณฑิต
+                        </h3>
+                        <p class="text-sky-100 text-base sm:text-lg font-medium mt-1">
+                            (ปริญญาตรี)
+                        </p>
+                    </div>
+                    <div class="mt-6 flex items-center text-xs sm:text-sm font-semibold text-white bg-black/20 w-fit px-4 py-2 rounded-xl group-hover:bg-white group-hover:text-blue-700 transition-colors">
+                        <span>คลิกเพื่อแสดงภาพข้อมูล</span>
+                        <i class="fa-solid fa-circle-chevron-down ml-2"></i>
+                    </div>
+                </button>
+
+                <!-- ปริญญาโท -->
+                <button onclick="showCurriculum('master')" id="btn-master"
+                    class="btn-card group relative overflow-hidden rounded-2xl p-6 text-left bg-gradient-to-br from-indigo-500 to-purple-700 border border-indigo-400/40 shadow-lg flex flex-col justify-between">
+                    <div class="absolute -right-6 -bottom-6 text-white/10 text-8xl transition-transform group-hover:scale-110">
+                        <i class="fa-solid fa-microscope"></i>
+                    </div>
+                    <div>
+                        <span class="inline-block px-3 py-1 rounded-lg bg-white/20 text-white text-xs font-semibold mb-3">
+                            Master's Degree
+                        </span>
+                        <h3 class="text-xl sm:text-2xl font-bold text-white leading-snug">
+                            หลักสูตรวิทยาศาสตรมหาบัณฑิต
+                        </h3>
+                        <p class="text-indigo-100 text-base sm:text-lg font-medium mt-1">
+                            (ปริญญาโท)
+                        </p>
+                    </div>
+                    <div class="mt-6 flex items-center text-xs sm:text-sm font-semibold text-white bg-black/20 w-fit px-4 py-2 rounded-xl group-hover:bg-white group-hover:text-purple-700 transition-colors">
+                        <span>คลิกเพื่อแสดงภาพข้อมูล</span>
+                        <i class="fa-solid fa-circle-chevron-down ml-2"></i>
+                    </div>
+                </button>
+
+                <!-- ปริญญาเอก -->
+                <button onclick="showCurriculum('phd')" id="btn-phd"
+                    class="btn-card group relative overflow-hidden rounded-2xl p-6 text-left bg-gradient-to-br from-amber-500 to-orange-600 border border-amber-300/40 shadow-lg flex flex-col justify-between">
+                    <div class="absolute -right-6 -bottom-6 text-white/10 text-8xl transition-transform group-hover:scale-110">
+                        <i class="fa-solid fa-award"></i>
+                    </div>
+                    <div>
+                        <span class="inline-block px-3 py-1 rounded-lg bg-white/20 text-white text-xs font-semibold mb-3">
+                            Doctoral Degree
+                        </span>
+                        <h3 class="text-xl sm:text-2xl font-bold text-white leading-snug">
+                            หลักสูตรปรัชญาดุษฎีบัณฑิต
+                        </h3>
+                        <p class="text-amber-100 text-base sm:text-lg font-medium mt-1">
+                            (ปริญญาเอก)
+                        </p>
+                    </div>
+                    <div class="mt-6 flex items-center text-xs sm:text-sm font-semibold text-white bg-black/20 w-fit px-4 py-2 rounded-xl group-hover:bg-white group-hover:text-orange-600 transition-colors">
+                        <span>คลิกเพื่อแสดงภาพข้อมูล</span>
+                        <i class="fa-solid fa-circle-chevron-down ml-2"></i>
+                    </div>
+                </button>
+
+            </div>
+        </section>
+
+        <!-- Dynamic Image Viewer Section (Shows immediately on click) -->
+        <section id="viewer-section" class="hidden transition-all duration-500">
+            <div class="glass-panel rounded-3xl p-4 sm:p-8 shadow-2xl border border-sky-400/30">
+                
+                <!-- Viewer Header -->
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 mb-6 border-b border-white/15">
+                    <div class="flex items-center gap-3">
+                        <div class="w-3 h-8 rounded-full bg-sky-400"></div>
+                        <h3 id="viewer-title" class="text-xl sm:text-2xl font-bold text-white">
+                            รายละเอียดหลักสูตร
+                        </h3>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-3">
+                        <a id="drive-direct-link" href="#" target="_blank" rel="noopener noreferrer"
+                            class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-sky-500 hover:bg-sky-400 text-slate-950 font-semibold text-sm transition-colors shadow-md">
+                            <i class="fa-brands fa-google-drive"></i>
+                            <span>เปิดลิงก์ Google Drive</span>
+                            <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+                        </a>
+                        <button onclick="closeViewer()"
+                            class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white/10 hover:bg-red-500/80 text-white text-sm font-medium transition-colors">
+                            <i class="fa-solid fa-xmark"></i>
+                            <span>ปิด</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Loading Spinner -->
+                <div id="image-loader" class="flex flex-col items-center justify-center py-16">
+                    <div class="loader ease-linear rounded-full border-4 border-t-4 border-slate-600 h-12 w-12 mb-4"></div>
+                    <p class="text-sky-200 text-sm">กำลังโหลดภาพจาก Google Drive...</p>
+                </div>
+
+                <!-- Image Display Container -->
+                <div id="image-wrapper" class="hidden flex flex-col items-center">
+                    <img id="curriculum-img" src="" alt="รายละเอียดหลักสูตร"
+                        class="max-w-full h-auto max-h-[85vh] rounded-2xl shadow-2xl border border-white/20 object-contain bg-slate-900/60"
+                        onload="onImageLoaded()" onerror="onImageError()">
+                </div>
+
+                <!-- Fallback Iframe Preview (in case browser blocks third-party image cookies) -->
+                <div id="iframe-wrapper" class="hidden w-full">
+                    <div class="relative w-full overflow-hidden rounded-2xl border border-white/20 bg-slate-900" style="padding-top: 75%;">
+                        <iframe id="curriculum-iframe" src="" class="absolute top-0 left-0 w-full h-full border-0" allow="autoplay"></iframe>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- QR Codes Contact Section -->
+        <section class="glass-panel rounded-3xl p-6 sm:p-10 shadow-xl">
+            <div class="text-center max-w-2xl mx-auto mb-8">
+                <h2 class="text-2xl sm:text-3xl font-bold text-white mb-2 flex items-center justify-center gap-3">
+                    <i class="fa-solid fa-qrcode text-sky-400"></i>
+                    <span>ช่องทางการติดต่อและติดตามข่าวสาร</span>
+                </h2>
+                <p class="text-slate-300 text-sm sm:text-base">
+                    สแกน QR Code ด้านล่างเพื่อสอบถามข้อมูลการรับสมัครและติดตามกิจกรรมของสาขาวิชา
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                
+                <!-- 1. LINE QR -->
+                <div class="qr-card bg-white rounded-2xl p-5 text-center shadow-lg flex flex-col items-center justify-between border-b-4 border-[#06C755]">
+                    <div class="w-full">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#06C755]/10 text-[#06C755] font-bold text-sm mb-3">
+                            <i class="fa-brands fa-line text-lg"></i>
+                            <span>LINE Official</span>
+                        </div>
+                        <div class="aspect-square w-full max-w-[200px] mx-auto bg-slate-50 rounded-xl p-2 border border-slate-100 flex items-center justify-center overflow-hidden">
+                            <img src="1795004633423.jpg" alt="LINE QR Code" class="w-full h-full object-contain">
+                        </div>
+                    </div>
+                    <p class="text-slate-600 text-xs font-medium mt-3">สแกนเพื่อแอดไลน์สอบถามข้อมูล</p>
+                </div>
+
+                <!-- 2. Facebook QR -->
+                <div class="qr-card bg-white rounded-2xl p-5 text-center shadow-lg flex flex-col items-center justify-between border-b-4 border-[#1877F2]">
+                    <div class="w-full">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#1877F2]/10 text-[#1877F2] font-bold text-sm mb-3">
+                            <i class="fa-brands fa-facebook text-lg"></i>
+                            <span>Facebook</span>
+                        </div>
+                        <div class="aspect-square w-full max-w-[200px] mx-auto bg-slate-50 rounded-xl p-2 border border-slate-100 flex items-center justify-center overflow-hidden">
+                            <img src="LINE_NOTE_261118_1.jpg" alt="Facebook QR Code" class="w-full h-full object-contain">
+                        </div>
+                    </div>
+                    <p class="text-slate-600 text-xs font-medium mt-3">ติดตามข่าวสารทางเพจเฟซบุ๊ก</p>
+                </div>
+
+                <!-- 3. Instagram QR -->
+                <div class="qr-card bg-white rounded-2xl p-5 text-center shadow-lg flex flex-col items-center justify-between border-b-4 border-[#E4405F]">
+                    <div class="w-full">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-pink-500/10 text-[#E4405F] font-bold text-sm mb-3">
+                            <i class="fa-brands fa-instagram text-lg"></i>
+                            <span>Instagram</span>
+                        </div>
+                        <div class="aspect-square w-full max-w-[200px] mx-auto bg-slate-50 rounded-xl p-2 border border-slate-100 flex items-center justify-center overflow-hidden">
+                            <img src="LINE_NOTE_261118_2.jpg" alt="Instagram QR Code" class="w-full h-full object-contain">
+                        </div>
+                    </div>
+                    <p class="text-slate-600 text-xs font-medium mt-3">ชมภาพบรรยากาศและผลงาน</p>
+                </div>
+
+                <!-- 4. TikTok QR -->
+                <div class="qr-card bg-white rounded-2xl p-5 text-center shadow-lg flex flex-col items-center justify-between border-b-4 border-slate-900">
+                    <div class="w-full">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900/10 text-slate-900 font-bold text-sm mb-3">
+                            <i class="fa-brands fa-tiktok text-lg"></i>
+                            <span>TikTok</span>
+                        </div>
+                        <div class="aspect-square w-full max-w-[200px] mx-auto bg-slate-50 rounded-xl p-2 border border-slate-100 flex items-center justify-center overflow-hidden">
+                            <img src="LINE_NOTE_261118_3.jpg" alt="TikTok QR Code" class="w-full h-full object-contain">
+                        </div>
+                    </div>
+                    <p class="text-slate-600 text-xs font-medium mt-3">รับชมคลิปวิดีโอสั้นน่ารู้</p>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="mt-12 text-center text-slate-400 text-xs sm:text-sm px-4">
+        <p>© สาขาวิชาเทคโนโลยีและนวัตกรรมวัสดุ คณะวิทยาศาสตร์และเทคโนโลยี มหาวิทยาลัยเทคโนโลยีราชมงคลธัญบุรี</p>
+    </footer>
+
+    <!-- JavaScript Logic -->
+    <script>
+        const curricula = {
+            bachelor: {
+                title: 'หลักสูตรวิทยาศาสตรบัณฑิต (ปริญญาตรี)',
+                fileId: '1LmIRtus7uHwfiMs4yvKEICQA_xN8tOP1',
+                driveUrl: 'https://drive.google.com/file/d/1LmIRtus7uHwfiMs4yvKEICQA_xN8tOP1/view?usp=sharing'
+            },
+            master: {
+                title: 'หลักสูตรวิทยาศาสตรมหาบัณฑิต (ปริญญาโท)',
+                fileId: '15mPjyWEF0GREKtQmSAhiFdiS-KvWgRJq',
+                driveUrl: 'https://drive.google.com/file/d/15mPjyWEF0GREKtQmSAhiFdiS-KvWgRJq/view?usp=sharing'
+            },
+            phd: {
+                title: 'หลักสูตรปรัชญาดุษฎีบัณฑิต (ปริญญาเอก)',
+                fileId: '1ye14XNQb9c6EaZJDAFUR3UD1pbJhU_7r',
+                driveUrl: 'https://drive.google.com/file/d/1ye14XNQb9c6EaZJDAFUR3UD1pbJhU_7r/view?usp=sharing'
+            }
+        };
+
+        let currentKey = null;
+
+        function showCurriculum(key) {
+            const data = curricula[key];
+            if (!data) return;
+            currentKey = key;
+
+            // Highlight active button
+            ['bachelor', 'master', 'phd'].forEach(k => {
+                const btn = document.getElementById(`btn-${k}`);
+                if (k === key) {
+                    btn.classList.add('ring-4', 'ring-sky-300');
+                } else {
+                    btn.classList.remove('ring-4', 'ring-sky-300');
+                }
+            });
+
+            // Update Viewer Elements
+            const viewerSection = document.getElementById('viewer-section');
+            const viewerTitle = document.getElementById('viewer-title');
+            const directLink = document.getElementById('drive-direct-link');
+            const loader = document.getElementById('image-loader');
+            const imgWrapper = document.getElementById('image-wrapper');
+            const iframeWrapper = document.getElementById('iframe-wrapper');
+            const imgEl = document.getElementById('curriculum-img');
+            const iframeEl = document.getElementById('curriculum-iframe');
+
+            viewerTitle.textContent = data.title;
+            directLink.href = data.driveUrl;
+
+            // Show section and loader
+            viewerSection.classList.remove('hidden');
+            loader.classList.remove('hidden');
+            imgWrapper.classList.add('hidden');
+            iframeWrapper.classList.add('hidden');
+
+            // Reset & set direct high-res image URL from Google Drive
+            imgEl.src = '';
+            iframeEl.src = '';
+            imgEl.src = `https://drive.google.com/thumbnail?id=${data.fileId}&sz=w2000`;
+
+            // Smooth scroll to image viewer
+            setTimeout(() => {
+                viewerSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
+        }
+
+        function onImageLoaded() {
+            document.getElementById('image-loader').classList.add('hidden');
+            document.getElementById('image-wrapper').classList.remove('hidden');
+        }
+
+        function onImageError() {
+            // Fallback to Google Drive embedded preview if direct image stream fails
+            if (!currentKey) return;
+            const data = curricula[currentKey];
+            document.getElementById('image-loader').classList.add('hidden');
+            document.getElementById('image-wrapper').classList.add('hidden');
+            
+            const iframeWrapper = document.getElementById('iframe-wrapper');
+            const iframeEl = document.getElementById('curriculum-iframe');
+            iframeEl.src = `https://drive.google.com/file/d/${data.fileId}/preview`;
+            iframeWrapper.classList.remove('hidden');
+        }
+
+        function closeViewer() {
+            document.getElementById('viewer-section').classList.add('hidden');
+            document.getElementById('curriculum-img').src = '';
+            document.getElementById('curriculum-iframe').src = '';
+            ['bachelor', 'master', 'phd'].forEach(k => {
+                document.getElementById(`btn-${k}`).classList.remove('ring-4', 'ring-sky-300');
+            });
+        }
+    </script>
+</body>
+</html>
