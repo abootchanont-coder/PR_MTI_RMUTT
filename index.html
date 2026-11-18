@@ -10,8 +10,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- QRCode.js Library for self-contained QR rendering -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <!-- QRCode-Generator Library (renders crisp inline SVG, works 100% on mobile) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
     
     <script>
         tailwind.config = {
@@ -45,17 +45,16 @@
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
         }
         .qr-card {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
         }
         .qr-card:hover {
-            transform: scale(1.04);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 20px 30px rgba(0,0,0,0.45);
         }
-        .qr-box img, .qr-box canvas {
-            margin: 0 auto;
+        .qr-svg-container svg {
             width: 100% !important;
-            height: auto !important;
-            max-width: 180px;
+            height: 100% !important;
+            display: block;
         }
         .loader {
             border-top-color: #38bdf8;
@@ -241,7 +240,7 @@
             </div>
         </section>
 
-        <!-- QR Codes Contact Section (100% Self-Contained & Clickable) -->
+        <!-- QR Codes Contact Section (Clickable QR Images + Exact Decoded URLs) -->
         <section class="glass-panel rounded-3xl p-6 sm:p-10 shadow-xl">
             <div class="text-center max-w-2xl mx-auto mb-8">
                 <h2 class="text-2xl sm:text-3xl font-bold text-white mb-2 flex items-center justify-center gap-3">
@@ -249,90 +248,110 @@
                     <span id="i18n-contact-title">ช่องทางการติดต่อและติดตามข่าวสาร</span>
                 </h2>
                 <p id="i18n-contact-sub" class="text-slate-300 text-sm sm:text-base">
-                    สแกน QR Code หรือคลิกที่การ์ดเพื่อสอบถามข้อมูลการรับสมัครและติดตามกิจกรรมของสาขาวิชา
+                    สแกน QR Code หรือคลิกที่ภาพ QR Code เพื่อเปิดลิงก์ติดต่อสาขาวิชาได้ทันที
                 </p>
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 
-                <!-- 1. LINE QR -->
-                <a href="https://line.me/ti/p/9fD1n37a6y" target="_blank" rel="noopener noreferrer"
-                   class="qr-card bg-white rounded-2xl p-5 text-center shadow-lg flex flex-col items-center justify-between border-b-4 border-[#06C755] cursor-pointer">
+                <!-- 1. LINE Official (@370jtydd) -->
+                <a href="https://line.me/R/ti/p/@370jtydd" target="_blank" rel="noopener noreferrer"
+                   class="qr-card group bg-white rounded-2xl p-5 text-center shadow-lg flex flex-col items-center justify-between border-b-4 border-[#06C755] cursor-pointer">
                     <div class="w-full">
                         <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#06C755]/10 text-[#06C755] font-bold text-sm mb-3">
                             <i class="fa-brands fa-line text-lg"></i>
                             <span>LINE Official</span>
                         </div>
-                        <div class="relative aspect-square w-full max-w-[190px] mx-auto bg-white rounded-xl p-2 border border-slate-100 flex items-center justify-center">
-                            <div id="qr-line" class="qr-box w-full"></div>
+                        <div class="relative aspect-square w-full max-w-[190px] mx-auto bg-white rounded-xl p-2 border border-slate-200 group-hover:border-[#06C755] transition-colors flex items-center justify-center">
+                            <div id="qr-line" class="qr-svg-container w-full h-full"></div>
                             <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
-                                <div class="bg-white px-1.5 py-0.5 rounded shadow-sm border border-[#06C755]">
+                                <div class="bg-white px-2 py-0.5 rounded-md shadow-md border-2 border-[#06C755]">
                                     <span class="text-[#06C755] font-extrabold text-xs tracking-wider">LINE</span>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <p id="i18n-qr-line" class="text-slate-600 text-xs font-medium mt-3">สแกนหรือแตะเพื่อแอดไลน์</p>
+                    <div class="mt-4 w-full">
+                        <span id="i18n-qr-line" class="inline-flex items-center justify-center gap-1.5 w-full py-2 px-3 rounded-xl bg-[#06C755] text-white text-xs font-semibold shadow-sm group-hover:bg-[#05b34c] transition-colors">
+                            <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                            <span>คลิกหรือสแกนแอด LINE</span>
+                        </span>
+                    </div>
                 </a>
 
-                <!-- 2. Facebook QR -->
-                <a href="https://www.facebook.com/PhysicsRMUTT" target="_blank" rel="noopener noreferrer"
-                   class="qr-card bg-white rounded-2xl p-5 text-center shadow-lg flex flex-col items-center justify-between border-b-4 border-[#1877F2] cursor-pointer">
+                <!-- 2. Facebook -->
+                <a href="https://www.facebook.com/share/1F435975dc/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer"
+                   class="qr-card group bg-white rounded-2xl p-5 text-center shadow-lg flex flex-col items-center justify-between border-b-4 border-[#1877F2] cursor-pointer">
                     <div class="w-full">
                         <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#1877F2]/10 text-[#1877F2] font-bold text-sm mb-3">
                             <i class="fa-brands fa-facebook text-lg"></i>
                             <span>Facebook</span>
                         </div>
-                        <div class="relative aspect-square w-full max-w-[190px] mx-auto bg-white rounded-xl p-2 border border-slate-100 flex items-center justify-center">
-                            <div id="qr-fb" class="qr-box w-full"></div>
+                        <div class="relative aspect-square w-full max-w-[190px] mx-auto bg-white rounded-xl p-2 border border-slate-200 group-hover:border-[#1877F2] transition-colors flex items-center justify-center">
+                            <div id="qr-fb" class="qr-svg-container w-full h-full"></div>
                             <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
-                                <div class="w-9 h-9 rounded-full bg-[#1877F2] text-white flex items-center justify-center shadow-md border-2 border-white">
+                                <div class="w-10 h-10 rounded-full bg-[#1877F2] text-white flex items-center justify-center shadow-md border-2 border-white">
                                     <i class="fa-brands fa-facebook-f text-lg"></i>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <p id="i18n-qr-fb" class="text-slate-600 text-xs font-medium mt-3">ติดตามข่าวสารทางเพจเฟซบุ๊ก</p>
+                    <div class="mt-4 w-full">
+                        <span id="i18n-qr-fb" class="inline-flex items-center justify-center gap-1.5 w-full py-2 px-3 rounded-xl bg-[#1877F2] text-white text-xs font-semibold shadow-sm group-hover:bg-[#1565c0] transition-colors">
+                            <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                            <span>คลิกหรือสแกนเปิด Facebook</span>
+                        </span>
+                    </div>
                 </a>
 
-                <!-- 3. Instagram QR -->
-                <a href="https://www.instagram.com/physics_rmutt" target="_blank" rel="noopener noreferrer"
-                   class="qr-card bg-white rounded-2xl p-5 text-center shadow-lg flex flex-col items-center justify-between border-b-4 border-[#E4405F] cursor-pointer">
+                <!-- 3. Instagram (@Mat_Sci_RMUTT) -->
+                <a href="https://www.instagram.com/Mat_Sci_RMUTT" target="_blank" rel="noopener noreferrer"
+                   class="qr-card group bg-white rounded-2xl p-5 text-center shadow-lg flex flex-col items-center justify-between border-b-4 border-[#E4405F] cursor-pointer">
                     <div class="w-full">
                         <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-pink-500/10 text-[#E4405F] font-bold text-sm mb-3">
                             <i class="fa-brands fa-instagram text-lg"></i>
                             <span>Instagram</span>
                         </div>
-                        <div class="relative aspect-square w-full max-w-[190px] mx-auto bg-white rounded-xl p-2 border border-slate-100 flex items-center justify-center">
-                            <div id="qr-ig" class="qr-box w-full"></div>
+                        <div class="relative aspect-square w-full max-w-[190px] mx-auto bg-white rounded-xl p-2 border border-slate-200 group-hover:border-[#E4405F] transition-colors flex items-center justify-center">
+                            <div id="qr-ig" class="qr-svg-container w-full h-full"></div>
                             <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
-                                <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600 text-white flex items-center justify-center shadow-md border-2 border-white">
+                                <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600 text-white flex items-center justify-center shadow-md border-2 border-white">
                                     <i class="fa-brands fa-instagram text-lg"></i>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <p id="i18n-qr-ig" class="text-slate-600 text-xs font-medium mt-3">ชมภาพบรรยากาศและผลงาน</p>
+                    <div class="mt-4 w-full">
+                        <span id="i18n-qr-ig" class="inline-flex items-center justify-center gap-1.5 w-full py-2 px-3 rounded-xl bg-gradient-to-r from-pink-500 to-purple-600 text-white text-xs font-semibold shadow-sm group-hover:opacity-90 transition-opacity">
+                            <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                            <span>คลิกหรือสแกนเปิด Instagram</span>
+                        </span>
+                    </div>
                 </a>
 
-                <!-- 4. TikTok QR -->
-                <a href="https://www.tiktok.com/@appliedphysics_rmutt" target="_blank" rel="noopener noreferrer"
-                   class="qr-card bg-white rounded-2xl p-5 text-center shadow-lg flex flex-col items-center justify-between border-b-4 border-slate-900 cursor-pointer">
+                <!-- 4. TikTok (@mat_sci_rmutt) -->
+                <a href="https://www.tiktok.com/@mat_sci_rmutt" target="_blank" rel="noopener noreferrer"
+                   class="qr-card group bg-white rounded-2xl p-5 text-center shadow-lg flex flex-col items-center justify-between border-b-4 border-slate-900 cursor-pointer">
                     <div class="w-full">
                         <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900/10 text-slate-900 font-bold text-sm mb-3">
                             <i class="fa-brands fa-tiktok text-lg"></i>
                             <span>TikTok</span>
                         </div>
-                        <div class="relative aspect-square w-full max-w-[190px] mx-auto bg-white rounded-xl p-2 border border-slate-100 flex items-center justify-center">
-                            <div id="qr-tiktok" class="qr-box w-full"></div>
+                        <div class="relative aspect-square w-full max-w-[190px] mx-auto bg-white rounded-xl p-2 border border-slate-200 group-hover:border-slate-900 transition-colors flex items-center justify-center">
+                            <div id="qr-tiktok" class="qr-svg-container w-full h-full"></div>
                             <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
-                                <div class="w-9 h-9 rounded-full bg-slate-950 text-white flex items-center justify-center shadow-md border-2 border-white">
+                                <div class="w-10 h-10 rounded-full bg-slate-950 text-white flex items-center justify-center shadow-md border-2 border-white">
                                     <i class="fa-brands fa-tiktok text-base"></i>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <p id="i18n-qr-tiktok" class="text-slate-600 text-xs font-medium mt-3">รับชมคลิปวิดีโอสั้นน่ารู้</p>
+                    <div class="mt-4 w-full">
+                        <span id="i18n-qr-tiktok" class="inline-flex items-center justify-center gap-1.5 w-full py-2 px-3 rounded-xl bg-slate-900 text-white text-xs font-semibold shadow-sm group-hover:bg-slate-800 transition-colors">
+                            <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                            <span>คลิกหรือสแกนเปิด TikTok</span>
+                        </span>
+                    </div>
                 </a>
 
             </div>
@@ -350,43 +369,26 @@
         let currentLang = 'th';
         let currentKey = null;
 
-        // Render Embedded QR Codes automatically on page load (Never breaks on mobile!)
+        // Generate Crisp Inline SVG QR Codes with exact URLs from your uploaded images
+        function renderSVGQR(elementId, url, color) {
+            const qr = qrcode(0, 'H');
+            qr.addData(url);
+            qr.make();
+            let svgTag = qr.createSvgTag({ cellSize: 4, margin: 1, scalable: true });
+            if (color) {
+                svgTag = svgTag.replace(/fill="#000000"/g, `fill="${color}"`);
+            }
+            document.getElementById(elementId).innerHTML = svgTag;
+        }
+
         window.addEventListener('DOMContentLoaded', () => {
-            new QRCode(document.getElementById("qr-line"), {
-                text: "https://line.me/ti/p/9fD1n37a6y",
-                width: 200,
-                height: 200,
-                colorDark : "#06C755",
-                colorLight : "#ffffff",
-                correctLevel : QRCode.CorrectLevel.H
-            });
-            new QRCode(document.getElementById("qr-fb"), {
-                text: "https://www.facebook.com/PhysicsRMUTT",
-                width: 200,
-                height: 200,
-                colorDark : "#000000",
-                colorLight : "#ffffff",
-                correctLevel : QRCode.CorrectLevel.H
-            });
-            new QRCode(document.getElementById("qr-ig"), {
-                text: "https://www.instagram.com/physics_rmutt",
-                width: 200,
-                height: 200,
-                colorDark : "#000000",
-                colorLight : "#ffffff",
-                correctLevel : QRCode.CorrectLevel.H
-            });
-            new QRCode(document.getElementById("qr-tiktok"), {
-                text: "https://www.tiktok.com/@appliedphysics_rmutt",
-                width: 200,
-                height: 200,
-                colorDark : "#000000",
-                colorLight : "#ffffff",
-                correctLevel : QRCode.CorrectLevel.H
-            });
+            renderSVGQR('qr-line', 'https://line.me/R/ti/p/@370jtydd', '#06C755');
+            renderSVGQR('qr-fb', 'https://www.facebook.com/share/1F435975dc/?mibextid=wwXIfr', '#000000');
+            renderSVGQR('qr-ig', 'https://www.instagram.com/Mat_Sci_RMUTT', '#000000');
+            renderSVGQR('qr-tiktok', 'https://www.tiktok.com/@mat_sci_rmutt', '#000000');
         });
 
-        // Updated Google Drive Links & Bilingual Titles
+        // Google Drive Links & Bilingual Titles
         const curricula = {
             bachelor: {
                 thTitle: 'หลักสูตรวิทยาศาสตรบัณฑิต (ปริญญาตรี)',
@@ -430,11 +432,11 @@
                 closeBtn: 'ปิด',
                 loading: 'กำลังโหลดภาพจาก Google Drive...',
                 contactTitle: 'ช่องทางการติดต่อและติดตามข่าวสาร',
-                contactSub: 'สแกน QR Code หรือคลิกที่การ์ดเพื่อสอบถามข้อมูลการรับสมัครและติดตามกิจกรรมของสาขาวิชา',
-                qrLine: 'สแกนหรือแตะเพื่อแอดไลน์',
-                qrFb: 'ติดตามข่าวสารทางเพจเฟซบุ๊ก',
-                qrIg: 'ชมภาพบรรยากาศและผลงาน',
-                qrTiktok: 'รับชมคลิปวิดีโอสั้นน่ารู้',
+                contactSub: 'สแกน QR Code หรือคลิกที่ภาพ QR Code เพื่อเปิดลิงก์ติดต่อสาขาวิชาได้ทันที',
+                qrLine: 'คลิกหรือสแกนแอด LINE',
+                qrFb: 'คลิกหรือสแกนเปิด Facebook',
+                qrIg: 'คลิกหรือสแกนเปิด Instagram',
+                qrTiktok: 'คลิกหรือสแกนเปิด TikTok',
                 footer: '© สาขาวิชาเทคโนโลยีและนวัตกรรมวัสดุ คณะวิทยาศาสตร์และเทคโนโลยี มหาวิทยาลัยเทคโนโลยีราชมงคลธัญบุรี'
             },
             en: {
@@ -457,11 +459,11 @@
                 closeBtn: 'Close',
                 loading: 'Loading image from Google Drive...',
                 contactTitle: 'Contact Us & Follow Our Channels',
-                contactSub: 'Scan QR codes or tap any card for admission inquiries and program updates',
-                qrLine: 'Scan or tap to chat on LINE',
-                qrFb: 'Follow our official Facebook page',
-                qrIg: 'Explore activities & photos on Instagram',
-                qrTiktok: 'Watch short videos on TikTok',
+                contactSub: 'Scan or click directly on any QR Code below to open the link',
+                qrLine: 'Click or Scan for LINE',
+                qrFb: 'Click or Scan for Facebook',
+                qrIg: 'Click or Scan for Instagram',
+                qrTiktok: 'Click or Scan for TikTok',
                 footer: '© Division of Materials Technology and Innovation, Faculty of Science and Technology, RMUTT'
             }
         };
@@ -509,10 +511,10 @@
 
             document.getElementById('i18n-contact-title').textContent = t.contactTitle;
             document.getElementById('i18n-contact-sub').textContent = t.contactSub;
-            document.getElementById('i18n-qr-line').textContent = t.qrLine;
-            document.getElementById('i18n-qr-fb').textContent = t.qrFb;
-            document.getElementById('i18n-qr-ig').textContent = t.qrIg;
-            document.getElementById('i18n-qr-tiktok').textContent = t.qrTiktok;
+            document.querySelector('#i18n-qr-line span').textContent = t.qrLine;
+            document.querySelector('#i18n-qr-fb span').textContent = t.qrFb;
+            document.querySelector('#i18n-qr-ig span').textContent = t.qrIg;
+            document.querySelector('#i18n-qr-tiktok span').textContent = t.qrTiktok;
             document.getElementById('i18n-footer').textContent = t.footer;
 
             if (currentKey) {
