@@ -368,25 +368,43 @@
         let currentLang = 'th';
         let currentKey = null;
 
-        // Google Drive Links & Bilingual Titles for 3 Curricula
+        // Google Drive Links & Titles separated by Thai (th) and English (en)
         const curricula = {
             bachelor: {
-                thTitle: 'หลักสูตรวิทยาศาสตรบัณฑิต (ปริญญาตรี)',
-                enTitle: 'Bachelor of Science Program (B.Sc.)',
-                fileId: '1xLI-tR8ENioSiD17Rjlx8BZD8zkWHFGg',
-                driveUrl: 'https://drive.google.com/file/d/1xLI-tR8ENioSiD17Rjlx8BZD8zkWHFGg/view?usp=sharing'
+                th: {
+                    title: 'หลักสูตรวิทยาศาสตรบัณฑิต (ปริญญาตรี)',
+                    fileId: '1pwc9tmvEBINKgDYxAcX54NCTa1d6MSM9',
+                    driveUrl: 'https://drive.google.com/file/d/1pwc9tmvEBINKgDYxAcX54NCTa1d6MSM9/view?usp=drivesdk'
+                },
+                en: {
+                    title: 'Bachelor of Science Program (B.Sc.)',
+                    fileId: '1OOFI6TFIkXT6u7jDbAaQBvsouDIhKcvi',
+                    driveUrl: 'https://drive.google.com/file/d/1OOFI6TFIkXT6u7jDbAaQBvsouDIhKcvi/view?usp=drivesdk'
+                }
             },
             master: {
-                thTitle: 'หลักสูตรวิทยาศาสตรมหาบัณฑิต (ปริญญาโท)',
-                enTitle: 'Master of Science Program (M.Sc.)',
-                fileId: '1Wl-NhNyFz1f-gMx38bGex6QB0lP4nEW4',
-                driveUrl: 'https://drive.google.com/file/d/1Wl-NhNyFz1f-gMx38bGex6QB0lP4nEW4/view?usp=sharing'
+                th: {
+                    title: 'หลักสูตรวิทยาศาสตรมหาบัณฑิต (ปริญญาโท)',
+                    fileId: '1XTO8TJPz5Zu9YiC6cNvabGP1-UPlNIg8',
+                    driveUrl: 'https://drive.google.com/file/d/1XTO8TJPz5Zu9YiC6cNvabGP1-UPlNIg8/view?usp=drivesdk'
+                },
+                en: {
+                    title: 'Master of Science Program (M.Sc.)',
+                    fileId: '1dzdw4PKfoyX3-qs86nrAZSV9WYaZ5G8k',
+                    driveUrl: 'https://drive.google.com/file/d/1dzdw4PKfoyX3-qs86nrAZSV9WYaZ5G8k/view?usp=drivesdk'
+                }
             },
             phd: {
-                thTitle: 'หลักสูตรปรัชญาดุษฎีบัณฑิต (ปริญญาเอก)',
-                enTitle: 'Doctor of Philosophy Program (Ph.D.)',
-                fileId: '11KprNdpsEpGiOhmwrbYDmqEH4UsLAaJ8',
-                driveUrl: 'https://drive.google.com/file/d/11KprNdpsEpGiOhmwrbYDmqEH4UsLAaJ8/view?usp=sharing'
+                th: {
+                    title: 'หลักสูตรปรัชญาดุษฎีบัณฑิต (ปริญญาเอก)',
+                    fileId: '1pphVYfXF5A-JHJf6IvxgQ7xZEykWf1L9',
+                    driveUrl: 'https://drive.google.com/file/d/1pphVYfXF5A-JHJf6IvxgQ7xZEykWf1L9/view?usp=drivesdk'
+                },
+                en: {
+                    title: 'Doctor of Philosophy Program (Ph.D.)',
+                    fileId: '1YSDhLpUMWtlm8lkwNjs5T45ROgNVJj-B',
+                    driveUrl: 'https://drive.google.com/file/d/1YSDhLpUMWtlm8lkwNjs5T45ROgNVJj-B/view?usp=drivesdk'
+                }
             }
         };
 
@@ -497,15 +515,16 @@
             document.querySelector('#i18n-qr-tiktok span').textContent = t.qrTiktok;
             document.getElementById('i18n-footer').textContent = t.footer;
 
+            // If a curriculum viewer is currently open, reload it in the newly selected language
             if (currentKey) {
-                const data = curricula[currentKey];
-                document.getElementById('viewer-title').textContent = lang === 'th' ? data.thTitle : data.enTitle;
+                showCurriculum(currentKey, false);
             }
         }
 
-        function showCurriculum(key) {
-            const data = curricula[key];
-            if (!data) return;
+        function showCurriculum(key, shouldScroll = true) {
+            const program = curricula[key];
+            if (!program) return;
+            const data = program[currentLang];
             currentKey = key;
 
             ['bachelor', 'master', 'phd'].forEach(k => {
@@ -526,7 +545,7 @@
             const imgEl = document.getElementById('curriculum-img');
             const iframeEl = document.getElementById('curriculum-iframe');
 
-            viewerTitle.textContent = currentLang === 'th' ? data.thTitle : data.enTitle;
+            viewerTitle.textContent = data.title;
             directLink.href = data.driveUrl;
 
             viewerSection.classList.remove('hidden');
@@ -538,9 +557,11 @@
             iframeEl.src = '';
             imgEl.src = `https://drive.google.com/thumbnail?id=${data.fileId}&sz=w2000`;
 
-            setTimeout(() => {
-                viewerSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }, 100);
+            if (shouldScroll) {
+                setTimeout(() => {
+                    viewerSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 100);
+            }
         }
 
         function onImageLoaded() {
@@ -550,7 +571,7 @@
 
         function onImageError() {
             if (!currentKey) return;
-            const data = curricula[currentKey];
+            const data = curricula[currentKey][currentLang];
             document.getElementById('image-loader').classList.add('hidden');
             document.getElementById('image-wrapper').classList.add('hidden');
             
